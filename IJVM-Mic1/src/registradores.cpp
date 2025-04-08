@@ -147,5 +147,5 @@ instru¸c˜oes, com o seguinte arranjo: Controle da ULA = 8 bits,  Controle do b
     auto [saida_ula, carry] = ula8bits(ula_bits, valor_a, valor_b);
     seletorBarramentoC(barraC, saida_ula);
 
-    IR = std::bitset<21>(instrucao).to_ulong();
+    IR = instrucao;;
 }
