@@ -6,9 +6,8 @@
 
 using namespace std;
 
-int main()
+bool etapa1()
 {
-
     // Leitura de arquivos:
     // Abrir os arquivos
     ifstream entrada("programa_etapa1.txt");
@@ -17,7 +16,7 @@ int main()
     if (!entrada.is_open() || !saida.is_open())
     {
         std::cerr << "Erro ao abrir arquivos de entrada ou saída.\n";
-        return 1;
+        return 0;
     }
 
     // Início do programa
@@ -63,8 +62,8 @@ int main()
         saida << "Cycle " << (PC + 1) << "\n\n";
         saida << "PC = " << (PC + 1) << "\n";
         saida << "IR = " << linha << "\n";
-        saida << "b = " << std::bitset<32>(1) << "\n";
-        saida << "a = " << std::bitset<32>(A ? static_cast<unsigned int>(-1) : 0) << "\n";
+        saida << "b = " << std::bitset<32>(B) << "\n";
+        saida << "a = " << std::bitset<32>(-A) << "\n";
         saida << "s = " << std::bitset<32>(S) << "\n";
         saida << "co = " << vai_um << "\n";
         saida << "============================================================\n";
@@ -74,6 +73,11 @@ int main()
 
     entrada.close();
     saida.close();
+    return 1;
+}
+
+int main()
+{
 
     return 0;
 }
