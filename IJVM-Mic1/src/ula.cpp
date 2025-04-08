@@ -26,7 +26,6 @@ std::pair<unsigned int, unsigned int> ula6bits(char input[6]){
         if(sum == 3) return {1, 1};
         else if (sum == 2) return {0, 1};
         else if (sum == 1) return {1, 0};
-        else return {0, 0};
     }
 
     return {output, carry_out};

@@ -57,19 +57,14 @@ int main()
         int A = IR[2] - '0';
         int B = IR[3] - '0';
 
-        // Pegar o valor que foi usado de A
-        if (IR[4] == '1')
-            A = !A;
-        // Aqui eu fiquei em dúvida se ele quer registrar o valor de A antes ou depois da inversão, me ajudem a decidir
-
         int S = resultado_Ula.first;
         int vai_um = resultado_Ula.second;
 
         saida << "Cycle " << (PC + 1) << "\n\n";
         saida << "PC = " << (PC + 1) << "\n";
         saida << "IR = " << linha << "\n";
-        saida << "b = " << std::bitset<32>(1) << "\n";
-        saida << "a = " << std::bitset<32>(A ? static_cast<unsigned int>(-1) : 0) << "\n";
+        saida << "b = " << std::bitset<32>(B) << "\n";
+        saida << "a = " << std::bitset<32>(-A) << "\n";
         saida << "s = " << std::bitset<32>(S) << "\n";
         saida << "co = " << vai_um << "\n";
         saida << "============================================================\n";
