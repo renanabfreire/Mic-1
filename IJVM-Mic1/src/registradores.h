@@ -14,7 +14,7 @@ class Registradores
 {
 public:
   int32_t H, OPC, TOS, CPP, LV, SP, PC, MDR, MAR;
-  uint8_t MBR;
+  int8_t MBR = 0;
   string IR;
 
   Registradores();
