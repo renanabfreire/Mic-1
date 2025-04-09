@@ -259,12 +259,12 @@ void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem,
     log << "============================================================\n";
 }
 
-bool etapa3()
+void etapa3()
 {
     Registradores regs;
     Memoria mem("../data/dados_etapa3_tarefa1.txt");
 
-    ifstream microFile("../data/microinstruções_etapa3_tarefa1.txt");
+    ifstream microFile("../data/microinstrues_etapa3_tarefa1.txt");
     vector<string> microinstrucoes;
     string linha;
 
@@ -299,24 +299,15 @@ bool etapa3()
     {
         executarMicroInstrucao(instr, regs, mem, log, ciclo);
         ciclo++;
+
     } // Final
     log << "Cycle " << ciclo << "\n";
     log << "No more lines, EOP.\n";
 
     log.close();
-    return 0;
 }
 
 int main()
 {
-
-    bool etapa;
-
-    etapa = etapa3();
-    if (etapa == 1)
-        return 0;
-    else if (etapa == 0)
-        return 1;
-
-    // etapa2_tarefa1();
+    etapa3();
 }

@@ -8,7 +8,7 @@
 
 Registradores::Registradores()
 {
-    H = 1; // Como no seu exemplo
+    H = 0; // Como no seu exemplo
     OPC = 0;
     TOS = 2; // Também como no seu exemplo
     CPP = 0;
@@ -116,9 +116,9 @@ void Registradores::seletorBarramentoC(const std::string &bits, int32_t valor)
         LV = valor;
     if (bits[5] == '1')
         SP = valor;
+    // SP = static_cast<int32_t>(static_cast<int8_t>(valor & 0xFF));
     if (bits[6] == '1')
         PC = valor;
-    // SP = static_cast<int32_t>(static_cast<int8_t>(valor & 0xFF));
     if (bits[7] == '1')
         MDR = valor;
     if (bits[8] == '1')
