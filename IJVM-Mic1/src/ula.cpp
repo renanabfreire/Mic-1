@@ -1,4 +1,5 @@
 #include "ijvm.h"
+#include <cstdint>
 
 std::pair<unsigned int, unsigned int> ula6bits(char input[6])
 {

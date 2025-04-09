@@ -4,19 +4,20 @@
 #include <fstream>
 #include <cstdlib>
 #include <bitset>
+#include <vector>
 
 Registradores::Registradores()
 {
-    H = 0;
+    H = 1; // Como no seu exemplo
     OPC = 0;
-    TOS = 0;
+    TOS = 2; // Também como no seu exemplo
     CPP = 0;
     LV = 0;
     SP = 0;
     PC = 0;
     MDR = 0;
     MAR = 0;
-    MBR = 0;
+    MBR = 0b10000001;
 }
 
 std::pair<int32_t, std::string> Registradores::decodificarBarramentoB(const std::string &bits)
@@ -37,19 +38,19 @@ std::pair<int32_t, std::string> Registradores::decodificarBarramentoB(const std:
         valor = PC;
         nome = "PC";
         break;
-    case 2:
+    case 2: // MBR com extensão de sinal (signed)
     {
         /*  Quando MBR é selecionado, o bit mais alto de MBR, que é o bit de sinal, deve ser utilizado para preencher
         a palavra de 8 bits até que esta tenha os 32 bits necessários */
-        int8_t mbr_signed = static_cast<int8_t>(MBR);
-        valor = mbr_signed;
+        int8_t mbr_signed = static_cast<int8_t>(MBR); // preserva o sinal
+        valor = static_cast<int32_t>(mbr_signed);     // extensão de sinal para 32 bits
         nome = "MBR (signed)";
         break;
     }
-    case 3:
+    case 3: // MBRU com extensão por zeros (unsigned)
     {
         /* Quando MBRU é selecionado, a palavra deve ser preenchida até 32 bits utilizando zeros.  */
-        valor = MBR;
+        valor = static_cast<uint8_t>(MBR); // zero-extend até 32 bits
         nome = "MBR (unsigned)";
         break;
     }
@@ -105,19 +106,23 @@ void Registradores::seletorBarramentoC(const std::string &bits, int32_t valor)
         H = valor;
 }
 
-void Registradores::imprimirEstado(const std::string &titulo) const
+void Registradores::imprimirEstado() const
 {
-    std::cout << titulo << std::endl;
-    std::cout << "H   = " << H << std::endl;
-    std::cout << "OPC = " << OPC << std::endl;
-    std::cout << "TOS = " << TOS << std::endl;
-    std::cout << "CPP = " << CPP << std::endl;
-    std::cout << "LV  = " << LV << std::endl;
-    std::cout << "SP  = " << SP << std::endl;
-    std::cout << "MBR = " << static_cast<int>(MBR) << std::endl;
-    std::cout << "PC  = " << PC << std::endl;
-    std::cout << "MDR = " << MDR << std::endl;
-    std::cout << "MAR = " << MAR << std::endl;
+    auto bin = [](int32_t val)
+    {
+        return std::bitset<32>(val).to_string();
+    };
+
+    std::cout << "mar = " << bin(MAR) << std::endl;
+    std::cout << "mdr = " << bin(MDR) << std::endl;
+    std::cout << "pc  = " << bin(PC) << std::endl;
+    std::cout << "mbr = " << std::bitset<8>(MBR) << std::endl;
+    std::cout << "sp  = " << bin(SP) << std::endl;
+    std::cout << "lv  = " << bin(LV) << std::endl;
+    std::cout << "cpp = " << bin(CPP) << std::endl;
+    std::cout << "tos = " << bin(TOS) << std::endl;
+    std::cout << "opc = " << bin(OPC) << std::endl;
+    std::cout << "h   = " << bin(H) << std::endl;
 }
 
 void Registradores::executarInstrucao(const std::string &instrucao)
@@ -138,6 +143,29 @@ instru¸c˜oes, com o seguinte arranjo: Controle da ULA = 8 bits,  Controle do b
     auto [valor_b, nome_b] = decodificarBarramentoB(barraB);
     int32_t valor_a = H;
 
+    std::cout << "b_bus = " << nome_b << std::endl;
+
+    // Lista registradores escritos
+    std::cout << "c_bus = ";
+    bool primeiro = true;
+    const std::vector<std::string> nomes = {"mar", "mdr", "pc", "sp", "lv", "cpp", "tos", "opc", "h"};
+    for (int i = 0; i < 9; ++i)
+    {
+        if (barraC[i] == '1')
+        {
+            if (!primeiro)
+                std::cout << ", ";
+            std::cout << nomes[i];
+            primeiro = false;
+        }
+    }
+    std::cout << std::endl
+              << std::endl;
+
+    std::cout << "> Registers before instruction" << std::endl;
+    imprimirEstado();
+    std::cout << std::endl;
+
     char ula_bits[8];
     for (int i = 0; i < 8; ++i)
     {
@@ -145,7 +173,12 @@ instru¸c˜oes, com o seguinte arranjo: Controle da ULA = 8 bits,  Controle do b
     }
 
     auto [saida_ula, carry] = ula8bits(ula_bits, valor_a, valor_b);
+    std::cout << "Resultado da ULA: " << saida_ula << std::endl;
     seletorBarramentoC(barraC, saida_ula);
 
-    IR = instrucao;;
+    std::cout << "> Registers after instruction" << std::endl;
+    imprimirEstado();
+    std::cout << std::endl;
+
+    IR = instrucao;
 }
