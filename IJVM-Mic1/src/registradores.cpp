@@ -118,6 +118,7 @@ void Registradores::seletorBarramentoC(const std::string &bits, int32_t valor)
         SP = valor;
     if (bits[6] == '1')
         PC = valor;
+    // SP = static_cast<int32_t>(static_cast<int8_t>(valor & 0xFF));
     if (bits[7] == '1')
         MDR = valor;
     if (bits[8] == '1')
