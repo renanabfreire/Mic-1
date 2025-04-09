@@ -106,26 +106,26 @@ void Registradores::seletorBarramentoC(const std::string &bits, int32_t valor)
         H = valor;
 }
 
-void Registradores::imprimirEstado() const
+void Registradores::imprimirEstado(std::ofstream &out) const
 {
     auto bin = [](int32_t val)
     {
         return std::bitset<32>(val).to_string();
     };
 
-    std::cout << "mar = " << bin(MAR) << std::endl;
-    std::cout << "mdr = " << bin(MDR) << std::endl;
-    std::cout << "pc  = " << bin(PC) << std::endl;
-    std::cout << "mbr = " << std::bitset<8>(MBR) << std::endl;
-    std::cout << "sp  = " << bin(SP) << std::endl;
-    std::cout << "lv  = " << bin(LV) << std::endl;
-    std::cout << "cpp = " << bin(CPP) << std::endl;
-    std::cout << "tos = " << bin(TOS) << std::endl;
-    std::cout << "opc = " << bin(OPC) << std::endl;
-    std::cout << "h   = " << bin(H) << std::endl;
+    out << "mar = " << bin(MAR) << "\n";
+    out << "mdr = " << bin(MDR) << "\n";
+    out << "pc  = " << bin(PC) << "\n";
+    out << "mbr = " << std::bitset<8>(MBR) << "\n";
+    out << "sp  = " << bin(SP) << "\n";
+    out << "lv  = " << bin(LV) << "\n";
+    out << "cpp = " << bin(CPP) << "\n";
+    out << "tos = " << bin(TOS) << "\n";
+    out << "opc = " << bin(OPC) << "\n";
+    out << "h   = " << bin(H) << "\n";
 }
 
-void Registradores::executarInstrucao(const std::string &instrucao)
+void Registradores::executarInstrucao(const std::string &instrucao, ofstream &out)
 {
     if (instrucao.size() != 21)
     {
@@ -163,7 +163,7 @@ instru¸c˜oes, com o seguinte arranjo: Controle da ULA = 8 bits,  Controle do b
               << std::endl;
 
     std::cout << "> Registers before instruction" << std::endl;
-    imprimirEstado();
+    imprimirEstado(out);
     std::cout << std::endl;
 
     char ula_bits[8];
@@ -177,8 +177,45 @@ instru¸c˜oes, com o seguinte arranjo: Controle da ULA = 8 bits,  Controle do b
     seletorBarramentoC(barraC, saida_ula);
 
     std::cout << "> Registers after instruction" << std::endl;
-    imprimirEstado();
+    imprimirEstado(out);
     std::cout << std::endl;
 
     IR = instrucao;
+}
+
+void Registradores::carregarRegistradores(const string &arquivo)
+{
+    ifstream arq(arquivo);
+    if (!arq.is_open())
+    {
+        cerr << "Erro ao abrir arquivo de registradores: " << arquivo << endl;
+        return;
+    }
+
+    string linha;
+    while (getline(arq, linha))
+    {
+        if (linha.find("mar") != string::npos)
+            MAR = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("mdr") != string::npos)
+            MDR = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("pc") != string::npos)
+            PC = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("mbr") != string::npos)
+            MBR = static_cast<int8_t>(bitset<8>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("sp") != string::npos)
+            SP = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("lv") != string::npos)
+            LV = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("cpp") != string::npos)
+            CPP = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("tos") != string::npos)
+            TOS = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("opc") != string::npos)
+            OPC = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+        else if (linha.find("h") != string::npos)
+            H = static_cast<int32_t>(bitset<32>(linha.substr(linha.find("=") + 2)).to_ulong());
+    }
+
+    arq.close();
 }
