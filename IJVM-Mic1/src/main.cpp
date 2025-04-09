@@ -262,9 +262,9 @@ void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem,
 bool etapa3()
 {
     Registradores regs;
-    Memoria mem("dados_etapa3_tarefa1.txt");
+    Memoria mem("../data/dados_etapa3_tarefa1.txt");
 
-    ifstream microFile("microinstruções_etapa3_tarefa1.txt");
+    ifstream microFile("../data/microinstruções_etapa3_tarefa1.txt");
     vector<string> microinstrucoes;
     string linha;
 
@@ -275,7 +275,7 @@ bool etapa3()
     }
 
     // Carregar registradores a partir de arquivo
-    regs.carregarRegistradores("registradores_etapa3_tarefa1.txt");
+    regs.carregarRegistradores("../data/registradores_etapa3_tarefa1.txt");
 
     // Arquivo de log
     ofstream log("saída_etapa3_tarefa1.txt");
@@ -312,7 +312,7 @@ int main()
 
     bool etapa;
 
-    etapa = etapa2();
+    etapa = etapa3();
     if (etapa == 1)
         return 0;
     else if (etapa == 0)
