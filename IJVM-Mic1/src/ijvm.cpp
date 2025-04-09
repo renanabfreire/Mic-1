@@ -1,5 +1,29 @@
 #include "ijvm.h"
 
+void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo, int& PC){
+    if(instrucao.find("ILOAD") != string::npos){
+        traduzMicroinstucao("H = LV", regs, mem, log, ciclo);
+        PC++;
+
+        int num = stoi(instrucao.substr(6));
+
+        for(int i=0; i<num; i++){
+            traduzMicroinstucao("H = H+1", regs, mem, log, ciclo);
+            PC++;
+        }
+
+        traduzMicroinstucao("MAR = H; rd", regs, mem, log, ciclo);
+        PC++;
+
+        traduzMicroinstucao("MAR = SP = SP+1; wr", regs, mem, log, ciclo);
+        PC++;
+
+        traduzMicroinstucao("TOS = MDR", regs, mem, log, ciclo);
+        PC++;
+    }
+
+    
+}
 
 void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo){
     string code;
