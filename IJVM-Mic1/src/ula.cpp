@@ -1,5 +1,6 @@
 #include "ijvm.h"
 #include <cstdint>
+#include <bitset>
 
 std::pair<unsigned int, unsigned int> ula6bits(char input[6])
 {
@@ -48,7 +49,7 @@ std::pair<unsigned int, unsigned int> ula6bits(char input[6])
 
 std::tuple<int32_t, int32_t, bool, bool, bool> ula8bits(char input[8], int32_t a, int32_t b)
 { //Saída da ULA = (saída, saída deslocada, N, Z, carry out)
-    bool N, Z, carry = false;
+    bool N, Z, carry = 0;
     bool sll8 = input[0] == '1';
     bool sra1 = input[1] == '1';
     bool f0 = input[2] == '1';
@@ -64,8 +65,13 @@ std::tuple<int32_t, int32_t, bool, bool, bool> ula8bits(char input[8], int32_t a
 
     if (f0 && f1)
     { // Adição
-        output = input_a + input_b + (inc ? 1 : 0);
-        carry = ((static_cast<uint64_t>(input_a) + static_cast<uint64_t>(input_b) + (inc ? 1 : 0)) >> 32) & 1;
+        // Converter para uint32_t para soma sem sinal
+        uint32_t ua = static_cast<uint32_t>(input_a);
+        uint32_t ub = static_cast<uint32_t>(input_b);
+        uint32_t uinc = inc ? 1 : 0;
+        uint64_t sum = static_cast<uint64_t>(ua) + static_cast<uint64_t>(ub) + uinc;
+        output = static_cast<int32_t>(sum & 0xFFFFFFFF); 
+        carry = (sum >> 32) & 1; // Carry é o bit 32
     }
     else if (!f0 && f1)
     { // OR
