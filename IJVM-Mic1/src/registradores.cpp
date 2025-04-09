@@ -143,10 +143,11 @@ void Registradores::executarInstrucao(const std::string &instrucao, ofstream &ou
     auto [valor_b, nome_b] = decodificarBarramentoB(barraB);
     int32_t valor_a = H;
 
-    std::cout << "b_bus = " << nome_b << std::endl;
+    // Imprime nome do barramento B
+    out << "b_bus = " << nome_b << std::endl;
 
-    // Lista registradores escritos
-    std::cout << "c_bus = ";
+    // Imprime nome(s) do(s) registrador(es) escritos no barramento C
+    out << "c_bus = ";
     bool primeiro = true;
     const std::vector<std::string> nomes = {"mar", "mdr", "pc", "sp", "lv", "cpp", "tos", "opc", "h"};
     for (int i = 0; i < 9; ++i)
@@ -154,31 +155,36 @@ void Registradores::executarInstrucao(const std::string &instrucao, ofstream &ou
         if (barraC[i] == '1')
         {
             if (!primeiro)
-                std::cout << ", ";
-            std::cout << nomes[i];
+                out << ", ";
+            out << nomes[i];
             primeiro = false;
         }
     }
-    std::cout << std::endl
-              << std::endl;
+    out << std::endl
+        << std::endl;
 
-    std::cout << "> Registers before instruction" << std::endl;
+    // Estado antes da instrução
+    out << "> Registers before instruction" << std::endl;
     imprimirEstado(out);
-    std::cout << std::endl;
+    out << std::endl;
 
+    // Prepara bits da ULA
     char ula_bits[8];
     for (int i = 0; i < 8; ++i)
     {
         ula_bits[i] = ula[i];
     }
 
+    // Executa a ULA
     auto [saida_ula, saida_sd, N, Z, carry] = ula8bits(ula_bits, valor_a, valor_b);
-    std::cout << "Resultado da ULA: " << saida_ula << std::endl;
+
+    // Atualiza registradores conforme barramento C
     seletorBarramentoC(barraC, saida_ula);
 
-    std::cout << "> Registers after instruction" << std::endl;
+    // Estado após a instrução
+    out << "> Registers after instruction" << std::endl;
     imprimirEstado(out);
-    std::cout << std::endl;
+    out << std::endl;
 
     IR = instrucao;
 }

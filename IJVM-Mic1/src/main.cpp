@@ -82,6 +82,8 @@ bool etapa1()
 bool etapa2()
 {
     ifstream arq("../data/programa_etapa2_tarefa2.txt");
+    ofstream saida("saida_etapa2.txt");
+
     if (!arq)
     {
         cerr << "Erro ao abrir o arquivo programa.txt" << endl;
@@ -94,28 +96,29 @@ bool etapa2()
     {
         if (!linha.empty())
         {
-            cout << linha << endl;
+            saida << linha << endl;
             instrucoes.push_back(linha);
         }
     }
 
-    cout << "=====================================================" << endl;
-    cout << "> Initial register states" << endl;
+    saida << "=====================================================" << endl;
+    saida << "> Initial register states" << endl;
     Registradores r;
-    // r.imprimirEstado();
-    cout << "\n=====================================================" << endl;
-    cout << "Start of program" << endl;
-    cout << "=====================================================" << endl;
+    r.imprimirEstado(saida);
+    saida << "\n=====================================================" << endl;
+    saida << "Start of program" << endl;
+    saida << "=====================================================" << endl;
 
     for (size_t ciclo = 0; ciclo < instrucoes.size(); ++ciclo)
     {
-        cout << "Cycle " << (ciclo + 1) << endl;
-        // r.executarInstrucao(instrucoes[ciclo]);
-        cout << "=====================================================" << endl;
+        saida << "Cycle " << (ciclo + 1) << endl;
+        r.executarInstrucao(instrucoes[ciclo], saida);
+        saida << "=====================================================" << endl;
     }
 
-    cout << "Cycle " << instrucoes.size() << endl;
-    cout << "No more lines, EOP." << endl;
+    saida << "Cycle " << instrucoes.size() + 1 << endl;
+    saida << "No more lines, EOP." << endl;
+
     return 1;
 }
 
@@ -309,7 +312,7 @@ int main()
 
     bool etapa;
 
-    etapa = etapa3();
+    etapa = etapa2();
     if (etapa == 1)
         return 0;
     else if (etapa == 0)
