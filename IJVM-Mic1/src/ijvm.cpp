@@ -22,7 +22,13 @@ void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &lo
         PC++;
     }
 
-    
+    if(instrucao == "DUP"){
+        traduzMicroinstucao("MAR = SP = SP+1", regs, mem, log, ciclo);
+        PC++;
+
+        traduzMicroinstucao("MDR = TOS; wr", regs, mem, log, ciclo);
+        PC++;
+    }
 }
 
 void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo){
@@ -34,6 +40,7 @@ void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, of
     else if(instrucao == "MAR = SP = SP+1") code = "00110101000001001010100";
     else if(instrucao == "MAR = SP = SP+1; wr") code = "00110101000001001100100";
     else if(instrucao == "TOS = MDR") code = "00110100101000000100000";
+    else if(instrucao == "MDR = TOS; wr") code = "00110100000000010100111";
 
     executarMicroInstrucao(code, regs, mem, log, ciclo);
 }
