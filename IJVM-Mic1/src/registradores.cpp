@@ -140,7 +140,9 @@ instru¸c˜oes, com o seguinte arranjo: Controle da ULA = 8 bits,  Controle do b
     string barraC = instrucao.substr(8, 9);
     string barraB = instrucao.substr(17, 4);
 
-    auto [valor_b, nome_b] = decodificarBarramentoB(barraB);
+    auto saida_B = decodificarBarramentoB(barraB);
+    int32_t valor_b = saida_B.first;
+    std::string nome_b = saida_B.second;
     int32_t valor_a = H;
 
     std::cout << "b_bus = " << nome_b << std::endl;
@@ -172,7 +174,9 @@ instru¸c˜oes, com o seguinte arranjo: Controle da ULA = 8 bits,  Controle do b
         ula_bits[i] = ula[i];
     }
 
-    auto [saida_ula, carry] = ula8bits(ula_bits, valor_a, valor_b);
+    auto resultUla = ula8bits(ula_bits, valor_a, valor_b);
+    int32_t saida_ula = get<0>(resultUla);
+    bool carry = get<4>(resultUla);
     std::cout << "Resultado da ULA: " << saida_ula << std::endl;
     seletorBarramentoC(barraC, saida_ula);
 

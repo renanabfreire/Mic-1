@@ -80,8 +80,7 @@ bool etapa1()
 
 bool etapa2()
 {
-
-    ifstream arq("programa_etapa2_tarefa2.txt");
+    ifstream arq("../data/programa_etapa2_tarefa2.txt");
     if (!arq)
     {
         cerr << "Erro ao abrir o arquivo programa.txt" << endl;
@@ -119,14 +118,71 @@ bool etapa2()
     return 1;
 }
 
+void etapa2_tarefa1(){
+
+    ifstream arq("../data/programa_etapa2_tarefa1.txt");
+    if (!arq)
+    {
+        cerr << "Erro ao abrir o arquivo programa.txt" << endl;
+        return;
+    }
+
+    int32_t b = 0b10000000000000000000000000000000;
+    int32_t a = 0b00000000000000000000000000000001;
+
+    cout << "b = "  << bitset<32>(b) << endl;
+    cout << "a = " << bitset<32>(a) << endl;
+    cout << "\n=====================================================" << endl;
+    cout << "Start of program" << endl;
+
+    vector<string> instrucoes;
+    string linha;
+    int cont = 1;
+    
+    while (getline(arq, linha))
+    {
+        if (!linha.empty())
+        {
+            cout << linha << endl;
+            instrucoes.push_back(linha);
+        }
+
+        char IR[8];
+        if (linha.size() >= 8) {
+            copy(linha.begin(), linha.begin() + 8, IR);
+        } else {
+            cerr << "Instrução inválida: " << linha << endl;
+            continue;
+        }
+
+        auto saida_ULA = ula8bits(IR, a, b);
+
+        cout << "Cycle " << cont << endl << endl;
+        cout << "PC: " << cont << endl; // PC em decimal, pois é um contador
+        cout << "IR: " << IR << endl;
+        cout << "b: " << bitset<32>(b) << endl;
+        cout << "a: " << bitset<32>(a) << endl;
+        cout << "Saida: " << bitset<32>(get<0>(saida_ULA)) << "\n";          // Saída em binário
+        cout << "Saida deslocada: " << bitset<32>(get<1>(saida_ULA)) << "\n"; // Saída deslocada em binário
+        cout << "N: " << get<2>(saida_ULA) << "\n";                          // Negativo (0 ou 1)
+        cout << "Z: " << get<3>(saida_ULA) << "\n";                          // Zero (0 ou 1)
+        cout << "Carry: " << get<4>(saida_ULA) << "\n";                      // Carry (0 ou 1)
+
+        cout << "=====================================================" << endl;
+        cont++;
+    }
+}
+
 int main()
 {
 
-    bool etapa;
+    /* bool etapa;
 
     etapa = etapa2();
     if (etapa == 1)
         return 0;
     else if (etapa == 0)
-        return 1;
+        return 1; */
+
+    etapa2_tarefa1();
 }
