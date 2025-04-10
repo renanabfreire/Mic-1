@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <bitset>
 
+// ULA de 6 bit (etapa 1)
 std::pair<unsigned int, unsigned int> ula6bits(char input[6])
 {
     unsigned int carry_out = 0, output = 0;
@@ -47,6 +48,7 @@ std::pair<unsigned int, unsigned int> ula6bits(char input[6])
     return {output, carry_out};
 }
 
+// ULA de 8 bits, utilizada na execução das microinstruções
 std::tuple<int32_t, int32_t, bool, bool, bool> ula8bits(char input[8], int32_t a, int32_t b)
 { //Saída da ULA = (saída, saída deslocada, N, Z, carry out)
     bool N, Z, carry = 0;
@@ -59,6 +61,7 @@ std::tuple<int32_t, int32_t, bool, bool, bool> ula8bits(char input[8], int32_t a
     bool inva = input[6] == '1';
     bool inc = input[7] == '1';
 
+    // Obtendo valores a serem utilizados por a e por b, além do output
     int32_t input_a = ena ? (inva ? ~a : a) : 0;
     int32_t input_b = enb ? b : 0;
     int32_t output, output_sd;
@@ -91,9 +94,9 @@ std::tuple<int32_t, int32_t, bool, bool, bool> ula8bits(char input[8], int32_t a
 
     output_sd = output;
 
-    if (sll8)
+    if (sll8) // deslocamento lógico
         output_sd <<= 8;
-    if (sra1)
+    if (sra1) // deslocamento aritmético
         output_sd >>= 1;
 
     N = output_sd < 0;

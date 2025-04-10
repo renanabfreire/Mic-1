@@ -13,6 +13,7 @@ using namespace std;
 class Registradores
 {
 public:
+  // registradores
   int32_t H, OPC, TOS, CPP, LV, SP, PC, MDR, MAR;
   int8_t MBR = 0;
   string IR;

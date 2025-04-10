@@ -11,6 +11,7 @@ using namespace std;
 class Memoria
 {
 private:
+    // Arquivo de memória
     vector<int32_t> dados;
     string nomeArquivo;
 

@@ -222,14 +222,19 @@ void etapa3()
     log.close();
 }
 
+
+// Função que contém o objetivo da atividade proposta
 int entregavel(int tamanho, char** input){
+    // Verificando se o usuário pôs todos os arquivos de input
     if(tamanho > 4 || tamanho < 4){
         cout << "Input Correto: IJVM instructions_file memory_file register_file";
         return 1;
     }
+    // Inicializando memória
     Registradores regs;
     Memoria mem(input[2]);
 
+    // inicializando arquivo de instruções
     ifstream microFile(input[1]);
     vector<string> microinstrucoes;
     string linha;
@@ -259,11 +264,12 @@ int entregavel(int tamanho, char** input){
     log << "Start of Program\n";
     log << "============================================================\n";
 
-    // Execução das microinstruções
-    int ciclo = 1;
-    int instrucao = 1;
+    // Execução das instruções
+    int ciclo = 1; // contador do ciclo
+    int instrucao = 1; // numero da função atual apenas para fim de ajudar a visualização do output
     for (const auto &instr : microinstrucoes)
     {
+        // execução das instruções
         Instrucao(instr, regs, mem, log, ciclo, instrucao);
         instrucao++;
 
@@ -277,6 +283,5 @@ int entregavel(int tamanho, char** input){
 }
 int main(int argc, char **argv)
 {
-    // Função que 
     return entregavel(argc ,argv);
 }

@@ -1,13 +1,14 @@
 #include "ijvm.h"
 
 void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int &ciclo, int instrucao_num){
+    // Instrução ILOAD
     if(instrucao.find("ILOAD") != string::npos){
         traduzMicroinstucao("H = LV", regs, mem, log, ciclo, instrucao_num);
         ciclo++;
 
         int num = stoi(instrucao.substr(6));
 
-        for(int i=0; i<num; i++){
+        for(int i=0; i<num; i++){ // Numero de incrementos que H deve sofrer
             traduzMicroinstucao("H = H+1", regs, mem, log, ciclo, instrucao_num);
             ciclo++;
         }
@@ -22,7 +23,7 @@ void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &lo
         ciclo++;
     }
 
-    if(instrucao == "DUP"){
+    if(instrucao == "DUP"){ // Função para duplicar dado
         traduzMicroinstucao("MAR = SP = SP+1", regs, mem, log, ciclo, instrucao_num);
         ciclo++;
 
@@ -30,7 +31,7 @@ void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &lo
         ciclo++;
     }
 
-    if(instrucao.find("BIPUSH") != string::npos){
+    if(instrucao.find("BIPUSH") != string::npos){ // Empilhar byte
         traduzMicroinstucao("SP = MAR = SP+1", regs, mem, log, ciclo, instrucao_num);
         ciclo++;
 
@@ -46,6 +47,7 @@ void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, of
 {
     string code;
 
+    // Codificação para cada microinstrução
     if(instrucao == "MAR = H; rd") code = "00111000000000001010000";
     else if(instrucao == "H = LV") code = "00110100100000000000101";
     else if(instrucao == "H = H+1") code = "00111001100000000000000";
@@ -68,6 +70,7 @@ void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem,
     log << "Cycle " << ciclo << "\n";
     log << "Instruction " << instrucao_num << "\n";
 
+    // Obtendo trechos do código separadamente
     string ula = instrucao.substr(0, 8);
     string barraC = instrucao.substr(8, 9);
     string ctrlMem = instrucao.substr(17, 2);
@@ -105,10 +108,11 @@ void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem,
     log << "*******************************\n";
     regs.imprimirEstado(log);
 
+    // Chamando execução da ULA
     char ula_bits[8];
     for (int i = 0; i < 8; ++i) ula_bits[i] = ula[i];
+    // Passando resultado
     auto [resultado_ula, resultado_sd, N, Z, carry] = ula8bits(ula_bits, valor_a, valor_b);
-
     regs.seletorBarramentoC(barraC, resultado_sd);
 
     if (ctrlMem == "10") { // WRITE
