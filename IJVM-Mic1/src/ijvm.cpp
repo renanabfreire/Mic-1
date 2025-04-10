@@ -24,7 +24,11 @@ void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &lo
     }
 
     if(instrucao.find("BIPUSH") != string::npos){
+        traduzMicroinstucao("SP = MAR = SP+1", regs, mem, log, ciclo);
 
+        traduzMicroinstucao("fetch" + instrucao.substr(7), regs, mem, log, ciclo);
+
+        traduzMicroinstucao("MDR = TOS = H; wr", regs, mem, log, ciclo);
     }
 }
 
@@ -35,13 +39,14 @@ void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, of
     if(instrucao == "MAR = H; rd") code = "00001000000000001010000";
     else if(instrucao == "H = LV") code = "00110100000000001000101";
     else if(instrucao == "H = H+1") code = "00111001100000000000000";
-    else if(instrucao == "MAR = SP = SP+1") code = "00111001000001001000000";
-    else if(instrucao == "MAR = SP = SP+1; wr") code = "00111001000001001100000";
+    else if(instrucao == "MAR = SP = SP+1") code = "00110101000001001000100";
+    else if(instrucao == "MAR = SP = SP+1; wr") code = "00110101000001001100100";
     else if(instrucao == "TOS = MDR") code = "00110100001000000000000";
     else if(instrucao == "MDR = TOS; wr") code = "00110100000000010100111";
     else if(instrucao == "MDR = TOS = H; wr") code = "00001000001000010100000";
-    else if(instrucao == "SP = MAR = SP+1") code = "00111001100100000000000";
-    else if(instrucao == "MDR = TOS = H; wr") code = "00001000001000010100000";
+    else if(instrucao == "SP = MAR = SP+1") code = "00110101000001001000100";
+    else if(instrucao == "MDR = TOS = H; wr") code = "00001000001000010101000";
+    else if(instrucao.find("fetch") != string::npos) code = instrucao.substr(5) + "000000000110000";
 
     executarMicroInstrucao(code, regs, mem, log, ciclo);
 }
