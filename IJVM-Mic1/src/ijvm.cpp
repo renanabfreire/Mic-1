@@ -28,7 +28,8 @@ void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &lo
     }
 }
 
-void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo){
+void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo)
+{
     string code;
 
     if(instrucao == "MAR = H; rd") code = "00001000100000000010000";
@@ -48,9 +49,7 @@ void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, of
 void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo) {
     if (instrucao.size() != 23) {
         log << "Erro: Instrução inválida com tamanho " << instrucao.size() << " bits (esperado 23)\n";
-        return;
     }
-
     log << "Cycle " << ciclo << "\n";
 
     string ula = instrucao.substr(0, 8);
