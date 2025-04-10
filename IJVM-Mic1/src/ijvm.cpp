@@ -32,11 +32,11 @@ void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, of
 {
     string code;
 
-    if(instrucao == "MAR = H; rd") code = "00001000100000000010000";
+    if(instrucao == "MAR = H; rd") code = "00001000000000001010000";
     else if(instrucao == "H = LV") code = "00110100000000001000101";
-    else if(instrucao == "H = H+1") code = "00111001000000001000000";
-    else if(instrucao == "MAR = SP = SP+1") code = "00111001100100000000000";
-    else if(instrucao == "MAR = SP = SP+1; wr") code = "00111001100100000100000";
+    else if(instrucao == "H = H+1") code = "00111001100000000000000";
+    else if(instrucao == "MAR = SP = SP+1") code = "00111001000001001000000";
+    else if(instrucao == "MAR = SP = SP+1; wr") code = "00111001000001001100000";
     else if(instrucao == "TOS = MDR") code = "00110100001000000000000";
     else if(instrucao == "MDR = TOS; wr") code = "00110100000000010100111";
     else if(instrucao == "MDR = TOS = H; wr") code = "00001000001000010100000";
