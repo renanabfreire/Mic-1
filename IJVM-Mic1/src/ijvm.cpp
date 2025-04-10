@@ -36,8 +36,8 @@ void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, of
 {
     string code;
 
-    if(instrucao == "MAR = H; rd") code = "00001000000000001010000";
-    else if(instrucao == "H = LV") code = "00110100000000001000101";
+    if(instrucao == "MAR = H; rd") code = "00111000000000001010000";
+    else if(instrucao == "H = LV") code = "00110100100000000000101";
     else if(instrucao == "H = H+1") code = "00111001100000000000000";
     else if(instrucao == "MAR = SP = SP+1") code = "00110101000001001000100";
     else if(instrucao == "MAR = SP = SP+1; wr") code = "00110101000001001100100";
