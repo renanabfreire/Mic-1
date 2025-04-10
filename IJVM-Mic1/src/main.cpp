@@ -175,7 +175,7 @@ void etapa2_tarefa1()
     }
 }
 
-void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo) {
+/*void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo) {
     if (instrucao.size() != 23) {
         log << "Erro: Instrução inválida com tamanho " << instrucao.size() << " bits (esperado 23)\n";
         return;
@@ -250,7 +250,7 @@ void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem,
     mem.imprimirDados(log);
 
     log << "============================================================\n";
-}
+}*/
 
 void etapa3()
 {
@@ -301,7 +301,54 @@ void etapa3()
     log.close();
 }
 
+void entregavel(){
+    Registradores regs;
+    Memoria mem("../data/dados_etapa3_tarefa1.txt");
+
+    ifstream microFile("instruc.txt");
+    vector<string> microinstrucoes;
+    string linha;
+
+    while (getline(microFile, linha))
+    {
+        if (!linha.empty())
+            microinstrucoes.push_back(linha);
+    }
+
+    // Carregar registradores a partir de arquivo
+    regs.carregarRegistradores("../data/registradores_etapa3_tarefa1.txt");
+
+    // Arquivo de log
+    ofstream log("saída.txt");
+
+    // Cabeçalho inicial
+    log << "============================================================\n";
+    log << "Initial memory state\n";
+    log << "*******************************\n";
+    mem.imprimirDados(log);
+    log << "*******************************\n";
+    log << "Initial register state\n";
+    log << "*******************************\n";
+    regs.imprimirEstado(log);
+    log << "============================================================\n";
+    log << "Start of Program\n";
+    log << "============================================================\n";
+
+    // Execução das microinstruções
+    int ciclo = 1;
+    for (const auto &instr : microinstrucoes)
+    {
+        Instrucao(instr, regs, mem, log, ciclo);
+        ciclo++;
+
+    } // Final
+    log << "Cycle " << ciclo << "\n";
+    log << "No more lines, EOP.\n";
+
+    log.close();
+}
+
 int main()
 {
-    etapa3();
+    entregavel();
 }

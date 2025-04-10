@@ -1,0 +1,2 @@
+ILOAD 3
+DUP
