@@ -1,51 +1,63 @@
 #include "ijvm.h"
 
-void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo, int& PC){
-    if(instrucao.find("ILOAD") != string::npos){
-        traduzMicroinstucao("H = LV", regs, mem, log, ciclo);
-        PC++;
+void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo, int &PC)
+{
+    if (instrucao.find("ILOAD") != string::npos)
+    {
+        /* traduzMicroinstucao("H = LV", regs, mem, log, ciclo);
+        PC++; */
 
         int num = stoi(instrucao.substr(6));
 
-        for(int i=0; i<num; i++){
-            traduzMicroinstucao("H = H+1", regs, mem, log, ciclo);
-            PC++;
+        for (int i = 0; i < num; i++)
+        {
+            /*  traduzMicroinstucao("H = H+1", regs, mem, log, ciclo);
+             PC++; */
         }
 
-        traduzMicroinstucao("MAR = H; rd", regs, mem, log, ciclo);
-        PC++;
+        /*  traduzMicroinstucao("MAR = H; rd", regs, mem, log, ciclo);
+         PC++; */
 
-        traduzMicroinstucao("MAR = SP = SP+1; wr", regs, mem, log, ciclo);
-        PC++;
-
-        traduzMicroinstucao("TOS = MDR", regs, mem, log, ciclo);
-        PC++;
+        /*  traduzMicroinstucao("MAR = SP = SP+1; wr", regs, mem, log, ciclo);
+         PC++;
+  */
+        /* traduzMicroinstucao("TOS = MDR", regs, mem, log, ciclo);
+        PC++; */
     }
 
-    if(instrucao == "DUP"){
-        traduzMicroinstucao("MAR = SP = SP+1", regs, mem, log, ciclo);
-        PC++;
+    if (instrucao == "DUP")
+    {
+        /* traduzMicroinstucao("MAR = SP = SP+1", regs, mem, log, ciclo);
+        PC++; */
 
-        traduzMicroinstucao("MDR = TOS; wr", regs, mem, log, ciclo);
-        PC++;
+        /*  traduzMicroinstucao("MDR = TOS; wr", regs, mem, log, ciclo);
+         PC++; */
     }
 }
 
-void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo){
+void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo)
+{
     string code;
 
-    if(instrucao == "MAR = H; rd") code = "00111000100000000010000";
-    else if(instrucao == "H = LV") code = "00111000100000000100011";
-    else if(instrucao == "H = H+1") code = "00110101100000000101000";
-    else if(instrucao == "MAR = SP = SP+1") code = "00110101000001001010100";
-    else if(instrucao == "MAR = SP = SP+1; wr") code = "00110101000001001100100";
-    else if(instrucao == "TOS = MDR") code = "00110100101000000100000";
-    else if(instrucao == "MDR = TOS; wr") code = "00110100000000010100111";
+    if (instrucao == "MAR = H; rd")
+        code = "00111000100000000010000";
+    else if (instrucao == "H = LV")
+        code = "00111000100000000100011";
+    else if (instrucao == "H = H+1")
+        code = "00110101100000000101000";
+    else if (instrucao == "MAR = SP = SP+1")
+        code = "00110101000001001010100";
+    else if (instrucao == "MAR = SP = SP+1; wr")
+        code = "00110101000001001100100";
+    else if (instrucao == "TOS = MDR")
+        code = "00110100101000000100000";
+    else if (instrucao == "MDR = TOS; wr")
+        code = "00110100000000010100111";
 
     executarMicroInstrucao(code, regs, mem, log, ciclo);
 }
 
-void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo)
+/* void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo)
 {
     if (instrucao.size() != 23)
     {
@@ -121,3 +133,4 @@ void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem,
 
     log << "============================================================\n";
 }
+ */
