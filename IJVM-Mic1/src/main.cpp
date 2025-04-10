@@ -141,7 +141,6 @@ void etapa2_tarefa1()
     {
         if (!linha.empty())
         {
-            cout << linha << endl;
             instrucoes.push_back(linha);
         }
 

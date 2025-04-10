@@ -7,26 +7,35 @@
 using namespace std;
 
 // Função para acessar o arquivo de dados, ler todas as linhas, pegar os valores numéricos e salvar em um vetor interno
-void Memoria::read()
-{
+void Memoria::read() {
+
     dados.clear();
     ifstream arq(nomeArquivo);
-    if (!arq)
-    {
-        cerr << "Erro ao abrir o arquivo de dados: " << nomeArquivo << endl;
-        dados.resize(8, 0);
+
+    if (!arq) {
+        std::cerr << "Erro ao abrir o arquivo de dados: " << nomeArquivo << std::endl;
+        dados.resize(8, 0); // Tamanho mínimo de 8, preenchido com 0
         return;
     }
-    string linha;
-    while (getline(arq, linha))
-    {
-        istringstream iss(linha);
-        int32_t valor;
-        iss >> valor;
-        dados.push_back(valor);
+
+    std::string linha;
+    while (std::getline(arq, linha)) {
+        // Verifica se a linha tem 32 caracteres (um número binário de 32 bits)
+        if (linha.size() == 32 && linha.find_first_not_of("01") == std::string::npos) {
+            // Converte a string binária para int32_t usando std::bitset
+            std::bitset<32> bits(linha);
+            int32_t valor = static_cast<int32_t>(bits.to_ulong());
+            dados.push_back(valor);
+        } else {
+            std::cerr << "Linha inválida no arquivo: " << linha << std::endl;
+        }
     }
-    while (dados.size() < 8) // completar o arquivo caso necessário
+
+    // Completa com zeros se menos de 8 elementos
+    while (dados.size() < 8) {
         dados.push_back(0);
+    }
+
     arq.close();
 }
 
@@ -36,18 +45,19 @@ Memoria::Memoria(const std::string &nomeArquivo) : nomeArquivo(nomeArquivo)
 }
 
 // Função para gravar o estado completo da memória
-void Memoria::write() const
-{
-    ofstream fout(nomeArquivo);
-    if (!fout)
-    {
-        cerr << "Erro ao escrever no arquivo de dados: " << nomeArquivo << endl;
+void Memoria::write() const {
+    std::ofstream fout(nomeArquivo);
+    if (!fout) {
+        std::cerr << "Erro ao escrever no arquivo de dados: " << nomeArquivo << std::endl;
         return;
     }
-    for (auto valor : dados)
-    {
-        fout << valor << endl;
+
+    for (auto valor : dados) {
+        // Converte o valor para binário de 32 bits e escreve no arquivo
+        std::bitset<32> bits(valor);
+        fout << bits.to_string() << std::endl;
     }
+
     fout.close();
 }
 
@@ -77,6 +87,7 @@ void Memoria::imprimirDados(ofstream &out) const
     {
         // Imprime o conteúdo em binário de 32 bits
         bitset<32> binario(dados[i]);
+        //cout << binario << endl;
         out << binario << "\n";
     }
 }
