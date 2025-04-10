@@ -155,8 +155,8 @@ void Registradores::executarInstrucao(const std::string &instrucao, ofstream &ou
         return;
     }
 
-    /* c´odigo deve ser capaz de receber palavras de 21 bits como
-    instru¸c˜oes, com o seguinte arranjo: Controle da ULA = 8 bits, Controle do barramento C= 9 bits, Controle do barramento B= 4 bits */
+    /* Código deve ser capaz de receber palavras de 21 bits como
+    instruções, com o seguinte arranjo: Controle da ULA = 8 bits, Controle do barramento C= 9 bits, Controle do barramento B= 4 bits */
 
     // Divisão dos campos da instrução:
     // - Controle da ULA: 8 bits (posição 0 a 7)

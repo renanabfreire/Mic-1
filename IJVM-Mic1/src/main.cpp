@@ -311,6 +311,43 @@ void etapa3()
     log.close();
 }
 
+/* void entregavel() {
+
+    Registradores regs;
+    Memoria mem("../data/dados_etapa3_tarefa1.txt");
+    regs.carregarRegistradores("../data/registradores_etapa3_tarefa1.txt");
+
+    ifstream arq("instrucoes.txt");
+    if (!arq.is_open()) {
+        cerr << "Erro ao abrir o arquivo instrucoes.txt" << endl;
+        return;
+    }
+
+    ofstream log("saida_etapa4.txt");
+    if (!log.is_open()) {
+        cerr << "Erro ao abrir o arquivo saida_etapa4.txt" << endl;
+        return;
+    }
+
+    int ciclo = 1;
+    int PC = 0;
+    string linha;
+
+    while (getline(arq, linha)) {
+        if (linha.empty())
+            continue;
+
+        log << "\n==== Instrução IJVM: " << linha << " ====\n";
+        Instrucao(linha, regs, mem, log, ciclo, PC);
+    }
+
+    log << "Cycle " << ciclo << "\n";
+    log << "No more instructions, EOP.\n";
+    arq.close();
+    log.close();
+
+} */
+
 int main()
 {
     etapa3();
