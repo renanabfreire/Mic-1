@@ -212,7 +212,7 @@ void etapa3()
     int ciclo = 1;
     for (const auto &instr : microinstrucoes)
     {
-        executarMicroInstrucao(instr, regs, mem, log, ciclo);
+        executarMicroInstrucao(instr, regs, mem, log, ciclo, 0);
         ciclo++;
 
     } // Final
@@ -261,10 +261,11 @@ int entregavel(int tamanho, char** input){
 
     // Execução das microinstruções
     int ciclo = 1;
+    int instrucao = 1;
     for (const auto &instr : microinstrucoes)
     {
-        Instrucao(instr, regs, mem, log, ciclo);
-        ciclo++;
+        Instrucao(instr, regs, mem, log, ciclo, instrucao);
+        instrucao++;
 
     } // Final
     log << "Cycle " << ciclo << "\n";
@@ -276,5 +277,6 @@ int entregavel(int tamanho, char** input){
 }
 int main(int argc, char **argv)
 {
+    // Função que 
     return entregavel(argc ,argv);
 }

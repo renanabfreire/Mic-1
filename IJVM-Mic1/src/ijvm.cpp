@@ -1,38 +1,48 @@
 #include "ijvm.h"
 
-void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo){
+void Instrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int &ciclo, int instrucao_num){
     if(instrucao.find("ILOAD") != string::npos){
-        traduzMicroinstucao("H = LV", regs, mem, log, ciclo);
+        traduzMicroinstucao("H = LV", regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
 
         int num = stoi(instrucao.substr(6));
 
         for(int i=0; i<num; i++){
-            traduzMicroinstucao("H = H+1", regs, mem, log, ciclo);
+            traduzMicroinstucao("H = H+1", regs, mem, log, ciclo, instrucao_num);
+            ciclo++;
         }
 
-        traduzMicroinstucao("MAR = H; rd", regs, mem, log, ciclo);
+        traduzMicroinstucao("MAR = H; rd", regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
 
-        traduzMicroinstucao("MAR = SP = SP+1; wr", regs, mem, log, ciclo);
+        traduzMicroinstucao("MAR = SP = SP+1; wr", regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
 
-        traduzMicroinstucao("TOS = MDR", regs, mem, log, ciclo);
+        traduzMicroinstucao("TOS = MDR", regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
     }
 
     if(instrucao == "DUP"){
-        traduzMicroinstucao("MAR = SP = SP+1", regs, mem, log, ciclo);
+        traduzMicroinstucao("MAR = SP = SP+1", regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
 
-        traduzMicroinstucao("MDR = TOS; wr", regs, mem, log, ciclo);
+        traduzMicroinstucao("MDR = TOS; wr", regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
     }
 
     if(instrucao.find("BIPUSH") != string::npos){
-        traduzMicroinstucao("SP = MAR = SP+1", regs, mem, log, ciclo);
+        traduzMicroinstucao("SP = MAR = SP+1", regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
 
-        traduzMicroinstucao("fetch" + instrucao.substr(7), regs, mem, log, ciclo);
+        traduzMicroinstucao("fetch" + instrucao.substr(7), regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
 
-        traduzMicroinstucao("MDR = TOS = H; wr", regs, mem, log, ciclo);
+        traduzMicroinstucao("MDR = TOS = H; wr", regs, mem, log, ciclo, instrucao_num);
+        ciclo++;
     }
 }
 
-void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo)
+void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo, int instrucao_num)
 {
     string code;
 
@@ -48,14 +58,15 @@ void traduzMicroinstucao(string instrucao, Registradores &regs, Memoria &mem, of
     else if(instrucao == "MDR = TOS = H; wr") code = "00001000001000010101000";
     else if(instrucao.find("fetch") != string::npos) code = instrucao.substr(5) + "000000000110000";
 
-    executarMicroInstrucao(code, regs, mem, log, ciclo);
+    executarMicroInstrucao(code, regs, mem, log, ciclo, instrucao_num);
 }
 
-void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo) {
+void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo, int instrucao_num) {
     if (instrucao.size() != 23) {
         log << "Erro: Instrução inválida com tamanho " << instrucao.size() << " bits (esperado 23)\n";
     }
     log << "Cycle " << ciclo << "\n";
+    log << "Instruction " << instrucao_num << "\n";
 
     string ula = instrucao.substr(0, 8);
     string barraC = instrucao.substr(8, 9);
