@@ -174,93 +174,6 @@ void etapa2_tarefa1()
     }
 }
 
-/*void executarMicroInstrucao(string instrucao, Registradores &regs, Memoria &mem, ofstream &log, int ciclo) {
-    if (instrucao.size() != 23) {
-        log << "Erro: Instrução inválida com tamanho " << instrucao.size() << " bits (esperado 23)\n";
-        return;
-    }
-
-    log << "Cycle " << ciclo << "\n";
-
-    string ula = instrucao.substr(0, 8);
-    string barraC = instrucao.substr(8, 9);
-    string ctrlMem = instrucao.substr(17, 2);
-    string barraB = instrucao.substr(19, 4);
-
-    string ir_str = ula + " " + barraC + " " + ctrlMem + " " + barraB;
-    log << "ir = " << ir_str << "\n";
-
-    int32_t valor_a = regs.getH();
-    int32_t valor_b = 0;
-    string nome_b = "Nenhum";
-
-    if (ctrlMem != "11")
-    { // Ignorar barramento B no caso fetch
-        auto [vb, nb] = regs.decodificarBarramentoB(barraB);
-        valor_b = vb;
-        nome_b = nb;
-    }
-
-    log << "b = " << nome_b << "\n";
-
-    log << "c = ";
-    bool primeiro = true;
-    // Corrigido: Ordem dos registradores reflete os bits de barraC (bit 0 = h, bit 8 = mar)
-    const vector<string> nomes = {"h", "opc", "tos", "cpp", "lv", "sp", "pc", "mdr", "mar"};
-    for (int i = 0; i < 9; ++i)
-    {
-        if (barraC[i] == '1')
-        {
-            if (!primeiro)
-                log << ", ";
-            log << nomes[i];
-            primeiro = false;
-        }
-    }
-    log << "\n\n";
-
-    log << "> Registers before instruction\n";
-    log << "*******************************\n";
-    regs.imprimirEstado(log);
-
-    char ula_bits[8];
-    for (int i = 0; i < 8; ++i)
-        ula_bits[i] = ula[i];
-    auto [resultado_ula, resultado_sd, N, Z, carry] = ula8bits(ula_bits, valor_a, valor_b);
-
-    regs.seletorBarramentoC(barraC, resultado_sd);
-
-    if (ctrlMem == "10")
-    { // WRITE
-        int endereco = regs.getMAR();
-        int32_t valor = regs.getMDR();
-        mem.dataWrite(endereco, valor);
-        mem.write();
-    }
-    else if (ctrlMem == "01")
-    { // READ
-        int endereco = regs.getMAR();
-        int32_t valor = mem.dataRead(endereco);
-        regs.setMDR(valor);
-    }
-    else if (ctrlMem == "11")
-    { // Caso especial: fetch
-        int8_t valor_mbr = static_cast<int8_t>(stoi(ula, nullptr, 2));
-        regs.MBR = valor_mbr;
-        regs.H = static_cast<int32_t>(static_cast<uint8_t>(valor_mbr)); // Preenchimento com zeros
-    }
-
-    log << "\n> Registers after instruction\n";
-    log << "*******************************\n";
-    regs.imprimirEstado(log);
-
-    log << "\n> Memory after instruction\n";
-    log << "*******************************\n";
-    mem.imprimirDados(log);
-
-    log << "============================================================\n";
-}*/
-
 void etapa3()
 {
     Registradores regs;
@@ -309,11 +222,15 @@ void etapa3()
     log.close();
 }
 
-void entregavel(){
+int entregavel(int tamanho, char** input){
+    if(tamanho > 4 || tamanho < 4){
+        cout << "Input Correto: IJVM instructions_file memory_file register_file";
+        return 1;
+    }
     Registradores regs;
-    Memoria mem("../data/dados_etapa3_tarefa1.txt");
+    Memoria mem(input[2]);
 
-    ifstream microFile("instruc.txt");
+    ifstream microFile(input[1]);
     vector<string> microinstrucoes;
     string linha;
 
@@ -324,10 +241,10 @@ void entregavel(){
     }
 
     // Carregar registradores a partir de arquivo
-    regs.carregarRegistradores("../data/registradores_etapa3_tarefa1.txt");
+    regs.carregarRegistradores(input[3]);
 
     // Arquivo de log
-    ofstream log("saída.txt");
+    ofstream log("output/saída.txt");
 
     // Cabeçalho inicial
     log << "============================================================\n";
@@ -354,8 +271,10 @@ void entregavel(){
     log << "No more lines, EOP.\n";
 
     log.close();
+
+    return 0;
 }
-int main()
+int main(int argc, char **argv)
 {
-    entregavel();
+    return entregavel(argc ,argv);
 }
